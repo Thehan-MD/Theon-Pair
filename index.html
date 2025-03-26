@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPUN MD SESSION PAGE</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #000;
+        color: #fff;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .container a, .generate-btn {
+        position: relative;
+        display: inline-block;
+        padding: 15px 30px;
+        border: 2px solid #0f0;
+        margin: 20px;
+        text-transform: uppercase;
+        font-weight: 600;
+        text-decoration: none;
+        letter-spacing: 2px;
+        color: #fff;
+        background: transparent;
+        cursor: pointer;
+        -webkit-box-reflect: below 0px linear-gradient(transparent,#0002);
+        transition: 0.5s;
+        transition-delay: 0s;
+    }
+
+    .container a:hover, .generate-btn:hover {
+        transition-delay: 1.5s;
+        color: #000;
+        box-shadow: 0 0 10px #0f0,
+                    0 0 20px #0f0,
+                    0 0 40px #0f0,
+                    0 0 80px #0f0,
+                    0 0 160px #0f0;
+    }
+
+    #sessionResult {
+        margin-top: 20px;
+        padding: 10px;
+        background: #111;
+        border: 1px solid #0f0;
+        display: none;
+    }
+</style>
+<body>
+    <h1>SUPUN MD SESSION PAGE</h1>
+    <div class="container">
+        <button class="generate-btn" onclick="generateSession(1)">PAIRING 01</button>
+        <button class="generate-btn" onclick="generateSession(2)">PAIRING 02</button>
+        <button class="generate-btn" onclick="generateSession(3)">PAIRING 03</button>
+    </div>
+
+    <div id="sessionResult">
+        <p>Session ID: <span id="sessionID">Loading...</span></p>
+        <button onclick="copySession()">Copy</button>
+    </div>
+
+    <br>
+    <p>HAVE ANY ERROR? CLICK ERROR BUTTON</p>
+    <a href="https://wa.me/+94718461889?text=SUPUN_MD_ERROR">ERROR</a>
+
+    <script>
+        async function generateSession(pairingNum) {
+            document.getElementById("sessionResult").style.display = "block";
+            document.getElementById("sessionID").innerText = "Generating...";
+            
+            try {
+                let response = await fetch(`https://your-vercel-api.vercel.app/api/getSession?pair=${pairingNum}`);
+                let data = await response.json();
+                document.getElementById("sessionID").innerText = data.session;
+            } catch (error) {
+                document.getElementById("sessionID").innerText = "Error fetching session!";
+            }
+        }
+
+        function copySession() {
+            let sessionText = document.getElementById("sessionID").innerText;
+            navigator.clipboard.writeText(sessionText);
+            alert("Session ID copied!");
+        }
+    </script>
+</body>
+</html>
